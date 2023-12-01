@@ -21,18 +21,11 @@ fn make_square(filename: &str) -> anyhow::Result<()> {
         mw.extent_image(2200, 2200, 100, (1100 - y).try_into().unwrap())?;
     }
 
-    mw.write_image("square2.jpg")?;
+    let s = filename.split(".").next().unwrap();
 
-    //let mut wand = MagickWand::new();
-    //wand.read_image(filename).unwrap();
-    //wand.set_gravity(GravityType_CenterGravity);
-    //wand.extend_image(2200, 2200, -100, -100);
-    //wand.crop_image(2200, 2200, 0, 0);
-
-    //wand.write_image("square.jpeg");
+    mw.write_image(format!("{}-square.jpg", s))?;
     Ok(())
 }
 fn main() {
-    make_square("yeet.jpg");
-    ()
+    let _ = make_square("yeet.jpg");
 }
