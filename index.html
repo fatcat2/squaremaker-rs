@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Minified version -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/simpledotcss/simple.min.css"
+    />
+  </head>
+  <style>
+    .l-box {
+      padding: 1em;
+    }
+    .pure-g > div {
+      box-sizing: border-box;
+    }
+    .row {
+      flex-direction: row;
+    }
+  </style>
+  <body>
+    <div class="row">
+      <div>
+        <h1>sqmkr</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <form action="/square" method="post" enctype="multipart/form-data">
+            <label>
+                Upload file:
+                <input type="file" name="file">
+            </label>
+
+            <input type="submit" value="Upload files">
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
