@@ -5,6 +5,7 @@ use anyhow::Context;
 use axum::{
     routing::{get, post},
     http::StatusCode,
+    extract::{DefaultBodyLimit, Multipart},
     Json, Router, response::Html,
 };
 use serde::{Deserialize, Serialize};
@@ -33,6 +34,9 @@ fn make_square(filename: &str) -> anyhow::Result<()> {
 
     mw.write_image(format!("{}-square.jpg", s))?;
     Ok(())
+}
+
+async fn make_square_handler(mut multipart: Multipart) {
 }
 
 #[tokio::main]
