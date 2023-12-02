@@ -5,7 +5,7 @@ use anyhow::Context;
 use axum::{
     routing::{get, post},
     http::StatusCode,
-    Json, Router,
+    Json, Router, response::Html,
 };
 use serde::{Deserialize, Serialize};
 
@@ -51,6 +51,7 @@ async fn main() {
 }
 
 // basic handler that responds with a static string
-async fn root() -> &'static str {
-    "Hello, World!"
+async fn root() -> Html<String>{
+    let html_text = std::fs::read_to_string("index.html").unwrap();
+    Html(html_text)
 }
