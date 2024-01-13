@@ -79,10 +79,10 @@ async fn make_square_handler(mut multipart: Multipart) -> impl IntoResponse {
             let data2 = make_square_from_blob(data).unwrap();
             let headers = [
                 (header::CONTENT_TYPE, "image/jpg"),
-                (
-                    header::CONTENT_DISPOSITION,
-                    "attachment; filename=\"square.jpg\"",
-                ),
+                // (
+                //     header::CONTENT_DISPOSITION,
+                //     "attachment; filename=\"square.jpg\"",
+                // ),
             ];
 
             return (headers, data2).into_response();
