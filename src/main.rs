@@ -7,8 +7,8 @@ use std::path::PathBuf;
 
 use axum::{
     extract::{DefaultBodyLimit, Multipart},
-    http::StatusCode,
-    response::Html,
+    http::{StatusCode, header},
+    response::{Html, Response, IntoResponse},
     routing::{get, post},
     Json, Router,
 };
@@ -71,12 +71,25 @@ fn make_square_from_blob(blob: Vec<u8>) -> anyhow::Result<Vec<u8>> {
         .to_vec())
 }
 
-async fn make_square_handler(mut multipart: Multipart) {
+async fn make_square_handler(mut multipart: Multipart) -> impl IntoResponse {
     while let Some(field) = multipart.next_field().await.unwrap() {
         if field.name().unwrap().to_string().eq("file") {
-            let data = field.bytes().await.unwrap();
+            let data = field.bytes().await.unwrap().to_vec();
+
+            let data2 = make_square_from_blob(data).unwrap();
+            let headers = [
+                (header::CONTENT_TYPE, "image/jpg"),
+                (
+                    header::CONTENT_DISPOSITION,
+                    "attachment; filename=\"square.jpg\"",
+                ),
+            ];
+
+            return (headers, data2).into_response();
         }
     }
+
+    return ().into_response();
 }
 
 #[tokio::main]
@@ -87,6 +100,7 @@ async fn main() {
     // build our application with a route
     let app = Router::new()
         // `GET /` goes to `root`
+        .route("/square", post(make_square_handler))
         .route("/", get(root));
 
     // run our app with hyper, listening globally on port 3000
