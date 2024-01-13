@@ -101,7 +101,8 @@ async fn main() {
     let app = Router::new()
         // `GET /` goes to `root`
         .route("/square", post(make_square_handler))
-        .route("/", get(root));
+        .route("/", get(root))
+        .layer(DefaultBodyLimit::max(4096));
 
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3128").await.unwrap();
