@@ -1,5 +1,5 @@
 use anyhow::Context;
-use core::slice::SlicePattern;
+// use core::slice::SlicePattern;
 use graphicsmagick::{
     initialize, types::FilterTypes, types::GravityType, wand::MagickWand, MagickBoxSlice,
 };
@@ -41,7 +41,7 @@ fn make_square(filename: &str) -> anyhow::Result<()> {
     Ok(())
 }
 
-fn make_square_from_blob(blob: Vec<u8>) -> Vec<u8> {
+fn make_square_from_blob(blob: Vec<u8>) -> anyhow::Result<Vec<u8>> {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("yeet.jpg");
     let path = path.to_str().context("get image path failed")?;
 
@@ -64,11 +64,11 @@ fn make_square_from_blob(blob: Vec<u8>) -> Vec<u8> {
         mw.extent_image(2200, 2200, 100, (1100 - y).try_into().unwrap())?;
     }
 
-    mw.set_image_format("jpg")
+    Ok(mw.set_image_format("jpg")
         .unwrap()
         .write_image_blob()
         .unwrap()
-        .to_vec()
+        .to_vec())
 }
 
 async fn make_square_handler(mut multipart: Multipart) {
