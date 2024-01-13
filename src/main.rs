@@ -1,20 +1,16 @@
 use anyhow::Context;
-// use core::slice::SlicePattern;
-use graphicsmagick::{
-    initialize, types::FilterTypes, types::GravityType, wand::MagickWand, MagickBoxSlice,
-};
+use graphicsmagick::{initialize, wand::MagickWand};
 use std::path::PathBuf;
 
 use axum::{
     extract::{DefaultBodyLimit, Multipart},
-    http::{StatusCode, header},
-    response::{Html, Response, IntoResponse},
+    http::header,
+    response::{Html, IntoResponse},
     routing::{get, post},
-    Json, Router,
+    Router,
 };
-use serde::{Deserialize, Serialize};
 
-fn make_square(filename: &str) -> anyhow::Result<()> {
+fn _make_square(filename: &str) -> anyhow::Result<()> {
     let path = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("yeet.jpg");
     let path = path.to_str().context("get image path failed")?;
 
@@ -64,7 +60,8 @@ fn make_square_from_blob(blob: Vec<u8>) -> anyhow::Result<Vec<u8>> {
         mw.extent_image(2200, 2200, 100, (1100 - y).try_into().unwrap())?;
     }
 
-    Ok(mw.set_image_format("jpg")
+    Ok(mw
+        .set_image_format("jpg")
         .unwrap()
         .write_image_blob()
         .unwrap()
